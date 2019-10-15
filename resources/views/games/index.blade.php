@@ -5,13 +5,6 @@
         <input type="hidden" id="rows" value="{{ $rows }}">
         <input type="hidden" id="cols" value="{{ $cols }}">
         <input type="hidden" id="image" value="/storage/images/{{ $image }}">
-        <!--<div class="mr-5" style="width: 400px" id="leftSide">
-            <img id="sourceImage" style="opacity: 0.2" src="/storage/images/{{ $image }}" alt="" class="d-block mx-auto w-100">
-            {{ $image }}
-        </div>
-        <div class="" style="width: 400px" id="rightSide">
-
-        </div>-->
     </div>
 
     <script type="text/javascript">
@@ -20,6 +13,8 @@
                 this.el = document.createElement('div');
                 this.el.classList.add('mx-auto');
                 this.el.style.width = '600px';
+                this.x = 0;
+                this.y = 0;
                 this.excels = [];
                 document.getElementById('root').appendChild(this.el);
             }
@@ -29,7 +24,14 @@
             }
 
             add(excel) {
-                this.el.appendChild(excel);
+                excel.getEl().style.left = this.x * excel.width + 'px';
+                excel.getEl().style.top = this.y * excel.height + 'px';
+                this.x++;
+                if (this.x == cols) {
+                    this.x = 0;
+                    this.y++;
+                }
+                this.el.appendChild(excel.getEl());
             }
         };
 
@@ -43,7 +45,7 @@
                 this.image = image;
 
                 let el = document.createElement('div');
-                el.style.position = 'relative';
+                el.style.position = 'absolute';
                 /*el.style.left = x + 'px';
                 el.style.top = y + 'px';*/
                 el.style.overflow = 'hidden';
@@ -81,7 +83,11 @@
                 this.img.src = image.src;
 
                 el.appendChild(this.img);
-                return el;
+                this.el = el;
+            }
+
+            getEl() {
+                return this.el;
             }
         };
 
@@ -89,8 +95,8 @@
             array.sort(() => Math.random() - 0.5);
         }
 
-        let rows = document.getElementById('rows').value;
-        let cols = document.getElementById('cols').value;
+        var rows = document.getElementById('rows').value;
+        var cols = document.getElementById('cols').value;
         let img = document.createElement('img');
         let leftField = new Field(document.getElementById('root'));
         let rightField = new Field(document.getElementById('root'));
