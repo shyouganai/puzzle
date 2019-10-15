@@ -44,8 +44,8 @@
 
                 let el = document.createElement('div');
                 el.style.position = 'relative';
-                el.style.left = x + 'px';
-                el.style.top = y + 'px';
+                /*el.style.left = x + 'px';
+                el.style.top = y + 'px';*/
                 el.style.overflow = 'hidden';
                 el.style.width = width + 'px';
                 el.style.height = height + 'px';
@@ -85,6 +85,10 @@
             }
         };
 
+        function shuffle(array) {
+            array.sort(() => Math.random() - 0.5);
+        }
+
         let rows = document.getElementById('rows').value;
         let cols = document.getElementById('cols').value;
         let img = document.createElement('img');
@@ -95,6 +99,7 @@
             let percent = img.width * 100 / rightField.width;
             img.width *= 100 / percent;
             img.height *= 100 / percent;
+            let excels = [];
             //img.style.width = field.width + 'px';
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
@@ -102,64 +107,13 @@
                     let y = i * img.height / rows;
                     let width = img.width / cols;
                     let height = img.height / rows;
-                    rightField.add(new Excel(x, y, width, height, rightField, img));
+                    excels.push(new Excel(x, y, width, height, rightField, img));
                 }
             }
+            shuffle(excels);
+            for (let i = 0; i < excels.length; i++)
+                rightField.add(excels[i]);
         };
-        //document.body.appendChild(img);
         img.src = document.getElementById('image').value;
-
-        //document.getElementById('sourceImage').style.width = document.getElementById('rightSide').offsetWidth + 'px';
-        /*let img = document.createElement('img');
-        let rows = document.getElementById('rows').value;
-        let cols = document.getElementById('cols').value;
-        document.getElementById('sourceImage').onload = function() {
-            let width = document.getElementById('leftSide').offsetWidth / rows;//this.width / rows;
-            let height = document.getElementById('leftSide').offsetHeight / cols;//this.height / cols;
-            for (let i = 0; i < rows; i++) {
-                let row = document.createElement('div');
-                row.classList.add('row');
-                for (let j = 0; j < cols; j++) {
-                    let puzzle = document.createElement('div');
-                    puzzle.style.overflow = 'hidden';
-                    puzzle.style.width = width + 'px';
-                    puzzle.style.height = height + 'px';
-                    puzzle.onmousedown = function (e) {
-                        puzzle.style.position = 'absolute';
-                        moveAt(e);
-                        document.body.appendChild(puzzle);
-
-                        function moveAt(e) {
-                            puzzle.style.left = e.pageX - puzzle.offsetWidth / 2 + 'px';
-                            puzzle.style.top = e.pageY - puzzle.offsetHeight / 2 + 'px';
-                        }
-
-                        document.onmousemove = function (e) {
-                            moveAt(e);
-                        }
-
-                        document.onmouseup = function () {
-                            document.onmousemove = null;
-                            puzzle.onmouseup = null;
-                        }
-                    };
-                    puzzle.ondragstart = function() {
-                        return false;
-                    }
-                    let cropImage = document.createElement('img');
-                    cropImage.style.width = document.getElementById('leftSide').offsetWidth + 'px';
-                    cropImage.style.height = document.getElementById('leftSide').offsetHeight + 'px';
-                    cropImage.style.position = 'relative';
-                    cropImage.style.left = (-j*width) + 'px';
-                    cropImage.style.top = (-i*height) + 'px';
-                    cropImage.src = document.getElementById('sourceImage').src;
-                    puzzle.appendChild(cropImage);
-                    row.appendChild(puzzle);
-                }
-                document.getElementById('rightSide').appendChild(row);
-            }
-        }*/
-        //img.src = document.getElementById('image').value;
-        //document.getElementById('leftSide').remove();
     </script>
 @endsection
